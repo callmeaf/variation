@@ -25,8 +25,6 @@ class VariationCollection extends ResourceCollection
                 'product_id' => fn() => $variation->product_id,
                 'status' => fn() => $variation->status,
                 'status_text' => fn() => $variation->statusText,
-                'type' => fn() => $variation->type,
-                'type_text' => fn() => $variation->typeText,
                 'sku' => fn() => $variation->sku,
                 'stock' => fn() => $variation->stock,
                 'title' => fn() => $variation->title,
@@ -39,8 +37,9 @@ class VariationCollection extends ResourceCollection
                 'created_at_text' => fn() => $variation->createdAtText,
                 'updated_at' => fn() => $variation->updated_at,
                 'updated_at_text' => fn() => $variation->updatedAtText,
-                'image' => fn() => new (config('callmeaf-media.model_resource'))($variation->image,only: $variation->only['!image'] ?? []),
-                'product' => fn() => new (config('callmeaf-product.model_resource'))($variation->product,only: $variation->only['!product'] ?? [])
+                'product' => fn() => new (config('callmeaf-product.model_resource'))($variation->product,only: $this->only['!product'] ?? []),
+                'image' => fn() => new (config('callmeaf-media.model_resource'))($variation->image,only: $this->only['!image'] ?? []),
+                'type' => fn() => new (config('callmeaf-variation-type.model_resource'))($variation->type,only: $this->only['!type'] ?? []),
             ],only: $this->only)),
         ];
     }

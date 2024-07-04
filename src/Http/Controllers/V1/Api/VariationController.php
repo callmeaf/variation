@@ -21,18 +21,14 @@ use Callmeaf\Variation\Http\Requests\V1\Api\VariationStoreRequest;
 use Callmeaf\Variation\Http\Requests\V1\Api\VariationUpdateRequest;
 use Callmeaf\Variation\Models\Variation;
 use Callmeaf\Variation\Services\V1\VariationService;
-use Callmeaf\Product\Services\V1\ProductService;
-use Illuminate\Support\Facades\Log;
 
 class VariationController extends ApiController
 {
     protected VariationService $variationService;
-    protected ProductService $productService;
     public function __construct()
     {
         app(config('callmeaf-variation.middlewares.variation'))($this);
         $this->variationService = app(config('callmeaf-variation.service'));
-        $this->productService = app(config('callmeaf-product.service'));
     }
 
     public function index(VariationIndexRequest $request)
@@ -59,8 +55,6 @@ class VariationController extends ApiController
     {
         try {
             $data = $request->validated();
-            $product = $this->productService->create(data: $data)->getModel();
-            $data['product_id'] = $product->id;
             $variation = $this->variationService->create(data: $data,events: [
                 VariationStored::class
             ])->getModel(asResource: true,attributes: config('callmeaf-variation.resources.store.attributes'),relations: config('callmeaf-variation.resources.store.relations'));
@@ -99,8 +93,6 @@ class VariationController extends ApiController
     {
         try {
             $data = $request->validated();
-            $product = $this->productService->setModel($variation->product)->update(data: $data)->getModel();
-            $data['product_id'] = $product->id;
             $variation = $this->variationService->setModel($variation)->update(data: $data,events: [
                 VariationUpdated::class,
             ])->getModel(asResource: true,attributes: config('callmeaf-variation.resources.update.attributes'),relations: config('callmeaf-variation.resources.update.relations'));
@@ -118,10 +110,7 @@ class VariationController extends ApiController
     public function statusUpdate(VariationStatusUpdateRequest $request,Variation $variation)
     {
         try {
-            $this->productService->setModel($variation->product)->update([
-                'status' => $request->get('status'),
-            ]);
-            $variation = $this->variationService->setModel($variation->load('product'))->getModel(asResource: true,attributes: config('callmeaf-variation.resources.status_update.attributes'),relations: config('callmeaf-variation.resources.status_update.relations'),events: [
+            $variation = $this->variationService->setModel($variation)->getModel(asResource: true,attributes: config('callmeaf-variation.resources.status_update.attributes'),relations: config('callmeaf-variation.resources.status_update.relations'),events: [
                 VariationStatusUpdated::class
             ]);
             return apiResponse([
@@ -138,8 +127,7 @@ class VariationController extends ApiController
     public function destroy(VariationDestroyRequest $request,Variation $variation)
     {
         try {
-            $this->productService->setModel($variation->product)->forceDelete();
-            $variation = $this->variationService->setModel($variation)->getModel(asResource: true,attributes: config('callmeaf-variation.resources.destroy.attributes'),events: [
+            $variation = $this->variationService->setModel($variation)->delete()->getModel(asResource: true,attributes: config('callmeaf-variation.resources.destroy.attributes'),events: [
                 VariationDestroyed::class,
             ]);
             return apiResponse([

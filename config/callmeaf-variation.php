@@ -7,7 +7,7 @@ return [
     'service' => \Callmeaf\Variation\Services\V1\VariationService::class,
     'default_values' => [
         'status' => \Callmeaf\Variation\Enums\VariationStatus::PRODUCT,
-        'type' => \Callmeaf\Variation\Enums\VariationType::DEBTOR,
+        'nature' => \Callmeaf\Variation\Enums\VariationNature::DEBTOR,
     ],
     'events' => [
         \Callmeaf\Variation\Events\VariationIndexed::class => [
@@ -45,21 +45,22 @@ return [
         'index' => [
             'relations' => [
                 'product',
-                'media'
+                'media',
+                'type',
             ],
             'columns' => [
                 'id',
-                'type',
+                'variation_type_id',
                 'status',
                 'sku',
                 'title',
+                'price',
+                'discount_price',
                 'created_at',
                 'updated_at',
             ],
             'attributes' => [
                 'id',
-                'type',
-                'type_text',
                 'status',
                 'status_text',
                 'sku',
@@ -72,6 +73,7 @@ return [
                 'updated_at_text',
                 'product',
                 '!product' => [
+                    'id',
                     'type',
                     'status',
                     'title',
@@ -99,6 +101,18 @@ return [
                     'disk',
                     'size',
                 ],
+                'type',
+                '!type' => [
+                    'id',
+                    'status',
+                    'status_text',
+                    'cat',
+                    'cat_text',
+                    'title',
+                    'content',
+                    'created_at_text',
+                    'updated_at_text',
+                ],
             ],
         ],
         'store' => [
@@ -107,8 +121,6 @@ return [
             ],
             'attributes' => [
                 'id',
-                'type',
-                'type_text',
                 'status',
                 'status_text',
                 'sku',
@@ -152,12 +164,11 @@ return [
         ],
         'show' => [
             'relations' => [
-                'product'
+                'product',
+                'type',
             ],
             'attributes' => [
                 'id',
-                'type',
-                'type_text',
                 'status',
                 'status_text',
                 'sku',
@@ -198,16 +209,20 @@ return [
                     'disk',
                     'size',
                 ],
+                'type',
+                '!type' => [
+                    'id',
+                    'cat',
+                    'title',
+                ],
             ],
         ],
         'update' => [
             'relations' => [
-                'product'
+                'product',
             ],
             'attributes' => [
                 'id',
-                'type',
-                'type_text',
                 'status',
                 'status_text',
                 'sku',
@@ -251,12 +266,10 @@ return [
         ],
         'status_update' => [
             'relations' => [
-                'product'
+                'product',
             ],
             'attributes' => [
                 'id',
-                'type',
-                'type_text',
                 'status',
                 'status_text',
                 'sku',
@@ -298,8 +311,6 @@ return [
             ],
             'attributes' => [
                 'id',
-                'type',
-                'type_text',
                 'status',
                 'status_text',
                 'sku',

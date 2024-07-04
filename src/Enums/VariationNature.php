@@ -2,7 +2,7 @@
 
 namespace Callmeaf\Variation\Enums;
 
-enum VariationType: int
+enum VariationNature: int
 {
     case DEBTOR = 1;
     case CREDITOR = 2;

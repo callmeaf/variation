@@ -1,16 +1,17 @@
 <?php
 
-namespace Callmeaf\Variation\Utilities\V1\Variation\Api;
+namespace Callmeaf\Variation\Utilities\V1\VariationType\Api;
 
 use Callmeaf\Base\Utilities\V1\FormRequestValidator;
 
-class VariationFormRequestValidator extends FormRequestValidator
+class VariationTypeFormRequestValidator extends FormRequestValidator
 {
     public function index(): array
     {
         return [
+            'status' => false,
             'title' => false,
-            'sku' => false,
+            'cat' => false,
         ];
     }
 
@@ -18,13 +19,9 @@ class VariationFormRequestValidator extends FormRequestValidator
     {
         return [
             'status' => true,
-            'variation_type_id' => true,
-            'sku' => false,
-            'title' => false,
+            'cat' => true,
+            'title' => true,
             'content' => false,
-            'price' => false,
-            'discount_price' => false,
-            'stock' => false,
         ];
     }
 
@@ -37,13 +34,9 @@ class VariationFormRequestValidator extends FormRequestValidator
     {
         return [
             'status' => true,
-            'variation_type_id' => true,
-            'sku' => false,
-            'title' => false,
+            'cat' => true,
+            'title' => true,
             'content' => false,
-            'price' => false,
-            'discount_price' => false,
-            'stock' => false,
         ];
     }
 
@@ -59,11 +52,4 @@ class VariationFormRequestValidator extends FormRequestValidator
         return [];
     }
 
-
-    public function imageUpdate(): array
-    {
-        return [
-            'image' => true,
-        ];
-    }
 }

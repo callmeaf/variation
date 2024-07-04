@@ -11,6 +11,8 @@ class CallmeafVariationServiceProvider extends ServiceProvider
     private const CONFIGS_DIR = __DIR__ . '/../config';
     private const CONFIGS_KEY = 'callmeaf-variation';
     private const CONFIGS_GROUP = 'callmeaf-variation-config';
+    private const VARIATION_TYPE_CONFIGS_KEY = 'callmeaf-variation-type';
+    private const VARIATION_TYPE_CONFIGS_GROUP = 'callmeaf-variation-type-config';
     private const ROUTES_DIR = __DIR__ . '/../routes';
     private const DATABASE_DIR = __DIR__ . '/../database';
     private const DATABASE_GROUPS = 'callmeaf-variation-migrations';
@@ -37,6 +39,11 @@ class CallmeafVariationServiceProvider extends ServiceProvider
         $this->publishes([
             self::CONFIGS_DIR . '/callmeaf-variation.php' => config_path('callmeaf-variation.php'),
         ],self::CONFIGS_GROUP);
+
+        $this->mergeConfigFrom(self::CONFIGS_DIR . '/callmeaf-variation-type.php',self::VARIATION_TYPE_CONFIGS_KEY);
+        $this->publishes([
+            self::CONFIGS_DIR . '/callmeaf-variation-type.php' => config_path('callmeaf-variation-type.php'),
+        ],self::VARIATION_TYPE_CONFIGS_GROUP);
     }
 
     private function registerRoute(): void

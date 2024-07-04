@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('variations', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(config('callmeaf-product.model'))->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(config('callmeaf-variation-type.model'))->nullable()->constrained()->nullOnDelete();
             $table->string('status')->nullable();
-            $table->string('type')->nullable();
+            $table->string('nature')->nullable();
             $table->string('sku')->nullable();
             $table->string('price')->nullable();
             $table->string('discount_price')->nullable();

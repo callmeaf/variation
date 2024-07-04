@@ -8,11 +8,12 @@ use Callmeaf\Base\Traits\HasDate;
 use Callmeaf\Base\Traits\HasMediaMethod;
 use Callmeaf\Base\Traits\HasStatus;
 use Callmeaf\Base\Traits\HasType;
+use Callmeaf\Variation\Enums\VariationNature;
 use Callmeaf\Variation\Enums\VariationStatus;
-use Callmeaf\Variation\Enums\VariationType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -21,8 +22,9 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
     use HasDate,HasStatus,HasType,InteractsWithMedia,HasMediaMethod;
     protected $fillable = [
         'product_id',
+        'variation_type_id',
         'status',
-        'type',
+        'nature',
         'sku',
         'stock',
         'price',
@@ -33,10 +35,10 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
 
     protected $casts = [
         'status' => VariationStatus::class,
-        'type' => VariationType::class,
+        'nature' => VariationNature::class,
     ];
 
-    protected static function booted()
+    protected static function booted(): void
     {
         static::creating(function(Model $model) {
             $model->forceFill([
@@ -50,10 +52,15 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
         return $this->belongsTo(config('callmeaf-product.model'));
     }
 
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(config('callmeaf-variation-type.model'),'variation_type_id','id');
+    }
+
     public function priceText(): Attribute
     {
         return Attribute::get(
-            fn() => currencyFormat(value: $this->price),
+            fn() => currencyFormat(value: $this->price,locale: $this->product?->locale),
         );
     }
 

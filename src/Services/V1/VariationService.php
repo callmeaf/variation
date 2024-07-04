@@ -23,9 +23,12 @@ class VariationService extends BaseService implements VariationServiceInterface
         $this->searcher = config('callmeaf-variation.searcher');
     }
 
-    public function newSku(): string
+    public function newSku(): ?string
     {
         $sku = randomId(length: config('callmeaf-variation.sku_length'),prefix: config('callmeaf-variation.prefix_sku'));
+        if(is_null($sku)) {
+            return null;
+        }
         if($this->freshQuery()->where(column: 'sku',valueOrOperation: $sku)->exists()) {
             return  $this->newSku();
         }
