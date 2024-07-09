@@ -4,6 +4,7 @@ namespace Callmeaf\Variation\Http\Resources\V1\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Log;
 
 class VariationCollection extends ResourceCollection
 {
@@ -37,9 +38,9 @@ class VariationCollection extends ResourceCollection
                 'created_at_text' => fn() => $variation->createdAtText,
                 'updated_at' => fn() => $variation->updated_at,
                 'updated_at_text' => fn() => $variation->updatedAtText,
-                'product' => fn() => new (config('callmeaf-product.model_resource'))($variation->product,only: $this->only['!product'] ?? []),
-                'image' => fn() => new (config('callmeaf-media.model_resource'))($variation->image,only: $this->only['!image'] ?? []),
-                'type' => fn() => new (config('callmeaf-variation-type.model_resource'))($variation->type,only: $this->only['!type'] ?? []),
+                'product' => fn() => $variation->product ? new (config('callmeaf-product.model_resource'))($variation->product,only: $this->only['!product'] ?? []) : null,
+                'image' => fn() => $variation->image ? new (config('callmeaf-media.model_resource'))($variation->image,only: $this->only['!image'] ?? []) : null,
+                'type' => fn() => $variation->type ? new (config('callmeaf-variation-type.model_resource'))($variation->type,only: $this->only['!type'] ?? []) : null,
             ],only: $this->only)),
         ];
     }

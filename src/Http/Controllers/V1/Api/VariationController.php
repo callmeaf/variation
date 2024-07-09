@@ -21,6 +21,7 @@ use Callmeaf\Variation\Http\Requests\V1\Api\VariationStoreRequest;
 use Callmeaf\Variation\Http\Requests\V1\Api\VariationUpdateRequest;
 use Callmeaf\Variation\Models\Variation;
 use Callmeaf\Variation\Services\V1\VariationService;
+use Illuminate\Support\Facades\Log;
 
 class VariationController extends ApiController
 {

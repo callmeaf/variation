@@ -10,6 +10,7 @@ use Callmeaf\Base\Traits\HasStatus;
 use Callmeaf\Base\Traits\HasType;
 use Callmeaf\Variation\Enums\VariationNature;
 use Callmeaf\Variation\Enums\VariationStatus;
+use Callmeaf\Variation\Enums\VariationTypeCat;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -54,7 +55,7 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
 
     public function type(): BelongsTo
     {
-        return $this->belongsTo(config('callmeaf-variation-type.model'),'variation_type_id','id');
+        return $this->belongsTo(config('callmeaf-variation-type.model'),'variation_type_id');
     }
 
     public function priceText(): Attribute
@@ -69,6 +70,16 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
         return Attribute::get(
             fn() => currencyFormat(value: $this->discount_price),
         );
+    }
+
+    public function isDigital(): bool
+    {
+        return $this->type?->cat === VariationTypeCat::DIGITAL;
+    }
+
+    public function isPhysical(): bool
+    {
+        return $this->type?->cat === VariationTypeCat::PHYSICAL;
     }
 
     public function responseTitles(string $key,string $default = ''): string

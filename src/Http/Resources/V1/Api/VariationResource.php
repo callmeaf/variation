@@ -20,7 +20,6 @@ class VariationResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        Log::alert(json_encode($this->only));
         return toArrayResource(data: [
             'id' => fn() => $this->id,
             'product_id' => fn() => $this->product_id,
@@ -38,9 +37,9 @@ class VariationResource extends JsonResource
             'created_at_text' => fn() => $this->createdAtText,
             'updated_at' => fn() => $this->updated_at,
             'updated_at_text' => fn() => $this->updatedAtText,
-            'product' => fn() => new (config('callmeaf-product.model_resource'))($this->product,only: $this->only['!product'] ?? []),
-            'image' => fn() => new (config('callmeaf-media.model_resource'))($this->image,only: $this->only['!image'] ?? []),
-            'type' => fn() => new (config('callmeaf-variation-type.model_resource'))($this->type,only: $this->only['!type'] ?? []),
+            'product' => fn() => $this->product ? new (config('callmeaf-product.model_resource'))($this->product,only: $this->only['!product'] ?? []) : null,
+            'image' => fn() => $this->product ? new (config('callmeaf-media.model_resource'))($this->image,only: $this->only['!image'] ?? []) : null,
+            'type' => fn() => $this->type ? new (config('callmeaf-variation-type.model_resource'))($this->type,only: $this->only['!type'] ?? []) : null,
         ],only: $this->only);
     }
 }

@@ -25,6 +25,7 @@ class VariationFormRequestValidator extends FormRequestValidator
             'price' => false,
             'discount_price' => false,
             'stock' => false,
+            'product_id' => false,
         ];
     }
 
