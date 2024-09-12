@@ -21,28 +21,32 @@ use Callmeaf\Variation\Http\Requests\V1\Api\VariationStoreRequest;
 use Callmeaf\Variation\Http\Requests\V1\Api\VariationUpdateRequest;
 use Callmeaf\Variation\Models\Variation;
 use Callmeaf\Variation\Services\V1\VariationService;
+use Callmeaf\Variation\Utilities\V1\Variation\Api\VariationResources;
 use Illuminate\Support\Facades\Log;
 
 class VariationController extends ApiController
 {
     protected VariationService $variationService;
+    protected VariationResources $variationResources;
     public function __construct()
     {
         app(config('callmeaf-variation.middlewares.variation'))($this);
         $this->variationService = app(config('callmeaf-variation.service'));
+        $this->variationResources = app(config('callmeaf-variation.resources.variation'));
     }
 
     public function index(VariationIndexRequest $request)
     {
         try {
+            $resources = $this->variationResources->index();
             $variations = $this->variationService->all(
-                relations: config('callmeaf-variation.resources.index.relations'),
-                columns: config('callmeaf-variation.resources.index.columns'),
+                relations: $resources->relations(),
+                columns: $resources->columns(),
                 filters: $request->validated(),
                 events: [
                     VariationIndexed::class,
                 ],
-            )->getCollection(asResourceCollection: true,asResponseData: true,attributes: config('callmeaf-variation.resources.index.attributes'));
+            )->getCollection(asResourceCollection: true,asResponseData: true,attributes: $resources->attributes());
             return apiResponse([
                 'variations' => $variations,
             ],__('callmeaf-base::v1.successful_loaded'));
@@ -55,10 +59,11 @@ class VariationController extends ApiController
     public function store(VariationStoreRequest $request)
     {
         try {
+            $resources = $this->variationResources->store();
             $data = $request->validated();
             $variation = $this->variationService->create(data: $data,events: [
                 VariationStored::class
-            ])->getModel(asResource: true,attributes: config('callmeaf-variation.resources.store.attributes'),relations: config('callmeaf-variation.resources.store.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation' => $variation,
             ],__('callmeaf-base::v1.successful_created', [
@@ -73,10 +78,11 @@ class VariationController extends ApiController
     public function show(VariationShowRequest $request,Variation $variation)
     {
         try {
+            $resources = $this->variationResources->show();
             $variation = $this->variationService->setModel($variation)->getModel(
                 asResource: true,
-                attributes: config('callmeaf-variation.resources.show.attributes'),
-                relations: config('callmeaf-variation.resources.show.relations'),
+                attributes: $resources->attributes(),
+                relations: $resources->relations(),
                 events: [
                     VariationShowed::class,
                 ],
@@ -93,10 +99,11 @@ class VariationController extends ApiController
     public function update(VariationUpdateRequest $request,Variation $variation)
     {
         try {
+            $resources = $this->variationResources->update();
             $data = $request->validated();
             $variation = $this->variationService->setModel($variation)->update(data: $data,events: [
                 VariationUpdated::class,
-            ])->getModel(asResource: true,attributes: config('callmeaf-variation.resources.update.attributes'),relations: config('callmeaf-variation.resources.update.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation' => $variation,
             ],__('callmeaf-base::v1.successful_updated', [
@@ -111,7 +118,8 @@ class VariationController extends ApiController
     public function statusUpdate(VariationStatusUpdateRequest $request,Variation $variation)
     {
         try {
-            $variation = $this->variationService->setModel($variation)->getModel(asResource: true,attributes: config('callmeaf-variation.resources.status_update.attributes'),relations: config('callmeaf-variation.resources.status_update.relations'),events: [
+            $resources = $this->variationResources->statusUpdate();
+            $variation = $this->variationService->setModel($variation)->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations(),events: [
                 VariationStatusUpdated::class
             ]);
             return apiResponse([
@@ -128,7 +136,8 @@ class VariationController extends ApiController
     public function destroy(VariationDestroyRequest $request,Variation $variation)
     {
         try {
-            $variation = $this->variationService->setModel($variation)->delete()->getModel(asResource: true,attributes: config('callmeaf-variation.resources.destroy.attributes'),events: [
+            $resources = $this->variationResources->destroy();
+            $variation = $this->variationService->setModel($variation)->delete()->getModel(asResource: true,attributes: $resources->attributes(),events: [
                 VariationDestroyed::class,
             ]);
             return apiResponse([
@@ -145,7 +154,8 @@ class VariationController extends ApiController
     public function imageUpdate(VariationImageUpdateRequest $request,Variation $variation)
     {
         try {
-            $variation = $this->variationService->setModel($variation)->createMedia(file: $request->file('image'),collection: MediaCollection::IMAGE,disk: MediaDisk::VARIATIONS)->getModel(asResource: true,attributes: config('callmeaf-variation.resources.image_update.attributes'),relations: config('callmeaf-variation.resources.image_update.relations'),events: [
+            $resources = $this->variationResources->imageUpdate();
+            $variation = $this->variationService->setModel($variation)->createMedia(file: $request->file('image'),collection: MediaCollection::IMAGE,disk: MediaDisk::VARIATIONS)->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations(),events: [
                 VariationImageUpdated::class,
             ]);
              return apiResponse([

@@ -19,28 +19,32 @@ use Callmeaf\Variation\Http\Requests\V1\Api\VariationTypeUpdateRequest;
 use Callmeaf\Variation\Models\VariationType;
 use Callmeaf\Variation\Services\V1\VariationTypeService;
 use Callmeaf\Product\Services\V1\ProductService;
+use Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeResources;
 use Illuminate\Support\Facades\Log;
 
 class VariationTypeController extends ApiController
 {
     protected VariationTypeService $variationTypeService;
+    protected VariationTypeResources $variationTypeResources;
     public function __construct()
     {
         app(config('callmeaf-variation-type.middlewares.variation_type'))($this);
         $this->variationTypeService = app(config('callmeaf-variation-type.service'));
+        $this->variationTypeResources = app(config('callmeaf-variation-type.resources.variation_type'));
     }
 
     public function index(VariationTypeIndexRequest $request)
     {
         try {
+            $resources = $this->variationTypeResources->index();
             $variationTypes = $this->variationTypeService->all(
-                relations: config('callmeaf-variation-type.resources.index.relations'),
-                columns: config('callmeaf-variation-type.resources.index.columns'),
+                relations: $resources->relations(),
+                columns: $resources->columns(),
                 filters: $request->validated(),
                 events: [
                     VariationTypeIndexed::class,
                 ],
-            )->getCollection(asResourceCollection: true,asResponseData: true,attributes: config('callmeaf-variation-type.resources.index.attributes'));
+            )->getCollection(asResourceCollection: true,asResponseData: true,attributes: $resources->attributes());
             return apiResponse([
                 'variation_types' => $variationTypes,
             ],__('callmeaf-base::v1.successful_loaded'));
@@ -53,10 +57,11 @@ class VariationTypeController extends ApiController
     public function store(VariationTypeStoreRequest $request)
     {
         try {
+            $resources = $this->variationTypeResources->store();
             $data = $request->validated();
             $variationType = $this->variationTypeService->create(data: $data,events: [
                 VariationTypeStored::class
-            ])->getModel(asResource: true,attributes: config('callmeaf-variation-type.resources.store.attributes'),relations: config('callmeaf-variation-type.resources.store.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_created', [
@@ -71,10 +76,11 @@ class VariationTypeController extends ApiController
     public function show(VariationTypeShowRequest $request,VariationType $variationType)
     {
         try {
+            $resources = $this->variationTypeResources->show();
             $variationType = $this->variationTypeService->setModel($variationType)->getModel(
                 asResource: true,
-                attributes: config('callmeaf-variation-type.resources.show.attributes'),
-                relations: config('callmeaf-variation-type.resources.show.relations'),
+                attributes: $resources->attributes(),
+                relations: $resources->relations(),
                 events: [
                     VariationTypeShowed::class,
                 ],
@@ -91,10 +97,11 @@ class VariationTypeController extends ApiController
     public function update(VariationTypeUpdateRequest $request,VariationType $variationType)
     {
         try {
+            $resources = $this->variationTypeResources->update();
             $data = $request->validated();
             $variationType = $this->variationTypeService->setModel($variationType)->update(data: $data,events: [
                 VariationTypeUpdated::class,
-            ])->getModel(asResource: true,attributes: config('callmeaf-variation-type.resources.update.attributes'),relations: config('callmeaf-variation-type.resources.update.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_updated', [
@@ -110,11 +117,12 @@ class VariationTypeController extends ApiController
     public function statusUpdate(VariationTypeStatusUpdateRequest $request,VariationType $variationType)
     {
         try {
+            $resources = $this->variationTypeResources->statusUpdate();
             $variationType = $this->variationTypeService->setModel($variationType)->update([
                 'status' => $request->get('status'),
             ],events: [
                 VariationTypeStatusUpdated::class,
-            ])->getModel(asResource: true,attributes: config('callmeaf-variation-type.resources.status_update.attributes'),relations: config('callmeaf-variation-type.resources.status_update.relations'));
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_updated', [
@@ -130,7 +138,8 @@ class VariationTypeController extends ApiController
     public function destroy(VariationTypeDestroyRequest $request,VariationType $variationType)
     {
         try {
-            $variationType = $this->variationTypeService->setModel($variationType)->getModel(asResource: true,attributes: config('callmeaf-variation-type.resources.destroy.attributes'),events: [
+            $resources = $this->variationTypeResources->destroy();
+            $variationType = $this->variationTypeService->setModel($variationType)->getModel(asResource: true,attributes: $resources->attributes(),events: [
                 VariationTypeDestroyed::class,
             ]);
             return apiResponse([
