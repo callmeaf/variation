@@ -2,8 +2,8 @@
 
 namespace Callmeaf\Variation\Http\Controllers\V1\Api;
 
+use Callmeaf\Base\Enums\ResponseTitle;
 use Callmeaf\Base\Http\Controllers\V1\Api\ApiController;
-use Callmeaf\Variation\Enums\VariationTypeStatus;
 use Callmeaf\Variation\Events\VariationTypeDestroyed;
 use Callmeaf\Variation\Events\VariationTypeIndexed;
 use Callmeaf\Variation\Events\VariationTypeShowed;
@@ -18,9 +18,7 @@ use Callmeaf\Variation\Http\Requests\V1\Api\VariationTypeStoreRequest;
 use Callmeaf\Variation\Http\Requests\V1\Api\VariationTypeUpdateRequest;
 use Callmeaf\Variation\Models\VariationType;
 use Callmeaf\Variation\Services\V1\VariationTypeService;
-use Callmeaf\Product\Services\V1\ProductService;
-use Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeResources;
-use Illuminate\Support\Facades\Log;
+use Callmeaf\Variation\Utilities\V1\Api\VariationType\VariationTypeResources;
 
 class VariationTypeController extends ApiController
 {
@@ -65,7 +63,7 @@ class VariationTypeController extends ApiController
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_created', [
-                'title' => $variationType->responseTitles('store'),
+                'title' => $variationType->responseTitles(ResponseTitle::STORE),
             ]));
         } catch (\Exception $exception) {
             report($exception);
@@ -105,7 +103,7 @@ class VariationTypeController extends ApiController
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_updated', [
-                'title' =>  $variationType->responseTitles('update')
+                'title' =>  $variationType->responseTitles(ResponseTitle::UPDATE)
             ]));
         } catch (\Exception $exception) {
             report($exception);
@@ -126,7 +124,7 @@ class VariationTypeController extends ApiController
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_updated', [
-                'title' =>  $variationType->responseTitles('status_update')
+                'title' =>  $variationType->responseTitles(ResponseTitle::STATUS_UPDATE)
             ]));
         } catch (\Exception $exception) {
             report($exception);
@@ -145,7 +143,7 @@ class VariationTypeController extends ApiController
             return apiResponse([
                 'variation_type' => $variationType,
             ],__('callmeaf-base::v1.successful_deleted', [
-                'title' =>  $variationType->responseTitles('destroy')
+                'title' =>  $variationType->responseTitles(ResponseTitle::DESTROY)
             ]));
         } catch (\Exception $exception) {
             report($exception);

@@ -1,11 +1,11 @@
 <?php
 
-namespace Callmeaf\Variation\Utilities\V1\Variation\Api;
+namespace Callmeaf\Variation\Utilities\V1\Api\VariationType;
 
 use Callmeaf\Base\Utilities\V1\Contracts\SearcherInterface;
 use Illuminate\Database\Eloquent\Builder;
 
-class VariationSearcher implements SearcherInterface
+class VariationTypeSearcher implements SearcherInterface
 {
     public function apply(Builder $query, array $filters = []): void
     {
@@ -13,8 +13,8 @@ class VariationSearcher implements SearcherInterface
         if($value = $filters->get('title')) {
             $query->where('title','like',searcherLikeValue($value));
         }
-        if($value = $filters->get('sku')) {
-            $query->where('sku','like',searcherLikeValue($value));
+        if($value = $filters->get('cat')) {
+            $query->where('cat','like',searcherLikeValue($value));
         }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Callmeaf\Variation\Utilities\V1\Variation\Api;
+namespace Callmeaf\Variation\Utilities\V1\Api\Variation;
 
 use Callmeaf\Base\Utilities\V1\Resources;
 
@@ -19,6 +19,7 @@ class VariationResources extends Resources
                 'variation_type_id',
                 'status',
                 'sku',
+                'stock',
                 'title',
                 'price',
                 'discount_price',
@@ -30,6 +31,7 @@ class VariationResources extends Resources
                 'status',
                 'status_text',
                 'sku',
+                'stock',
                 'title',
                 'price',
                 'price_text',
@@ -95,6 +97,7 @@ class VariationResources extends Resources
                 'status',
                 'status_text',
                 'sku',
+                'stock',
                 'title',
                 'price',
                 'price_text',
@@ -148,6 +151,7 @@ class VariationResources extends Resources
                 'status',
                 'status_text',
                 'sku',
+                'stock',
                 'title',
                 'content',
                 'price',
@@ -207,6 +211,7 @@ class VariationResources extends Resources
                 'status',
                 'status_text',
                 'sku',
+                'stock',
                 'title',
                 'price',
                 'price_text',
@@ -259,6 +264,7 @@ class VariationResources extends Resources
                 'status',
                 'status_text',
                 'sku',
+                'stock',
                 'title',
                 'price',
                 'price_text',
@@ -310,6 +316,7 @@ class VariationResources extends Resources
                 'status',
                 'status_text',
                 'sku',
+                'stock',
                 'title',
                 'price',
                 'price_text',

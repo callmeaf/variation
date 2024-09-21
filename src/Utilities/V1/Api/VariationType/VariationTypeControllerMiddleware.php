@@ -1,12 +1,12 @@
 <?php
 
-namespace Callmeaf\Variation\Utilities\V1\Variation\Api;
+namespace Callmeaf\Variation\Utilities\V1\Api\VariationType;
 
 use Callmeaf\Base\Http\Controllers\BaseController;
 use Callmeaf\Base\Utilities\V1\ControllerMiddleware;
 
 
-class VariationControllerMiddleware extends ControllerMiddleware
+class VariationTypeControllerMiddleware extends ControllerMiddleware
 {
     public function __invoke(BaseController $controller): void
     {

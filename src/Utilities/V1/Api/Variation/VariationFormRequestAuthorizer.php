@@ -1,6 +1,6 @@
 <?php
 
-namespace Callmeaf\Variation\Utilities\V1\Variation\Api;
+namespace Callmeaf\Variation\Utilities\V1\Api\Variation;
 
 use Callmeaf\Base\Utilities\V1\FormRequestAuthorizer;
 use Callmeaf\Permission\Enums\PermissionName;

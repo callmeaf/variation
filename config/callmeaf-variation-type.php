@@ -26,19 +26,19 @@ return [
         ],
     ],
     'validations' => [
-        'variation_type' => \Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeFormRequestValidator::class,
+        'variation_type' => \Callmeaf\Variation\Utilities\V1\Api\VariationType\VariationTypeFormRequestValidator::class,
     ],
     'resources' => [
-        'variation_type' => \Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeResources::class,
+        'variation_type' => \Callmeaf\Variation\Utilities\V1\Api\VariationType\VariationTypeResources::class,
     ],
     'controllers' => [
         'variation_types' => \Callmeaf\Variation\Http\Controllers\V1\Api\VariationTypeController::class,
     ],
     'form_request_authorizers' => [
-        'variation_type' => \Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeFormRequestAuthorizer::class,
+        'variation_type' => \Callmeaf\Variation\Utilities\V1\Api\VariationType\VariationTypeFormRequestAuthorizer::class,
     ],
     'middlewares' => [
-        'variation_type' => \Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeControllerMiddleware::class,
+        'variation_type' => \Callmeaf\Variation\Utilities\V1\Api\VariationType\VariationTypeControllerMiddleware::class,
     ],
-    'searcher' => \Callmeaf\Variation\Utilities\V1\VariationType\Api\VariationTypeSearcher::class,
+    'searcher' => \Callmeaf\Variation\Utilities\V1\Api\VariationType\VariationTypeSearcher::class,
 ];

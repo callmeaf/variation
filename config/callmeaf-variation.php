@@ -39,21 +39,21 @@ return [
         ],
     ],
     'validations' => [
-        'variation' => \Callmeaf\Variation\Utilities\V1\Variation\Api\VariationFormRequestValidator::class,
+        'variation' => \Callmeaf\Variation\Utilities\V1\Api\Variation\VariationFormRequestValidator::class,
     ],
     'resources' => [
-        'variation' => \Callmeaf\Variation\Utilities\V1\Variation\Api\VariationResources::class,
+        'variation' => \Callmeaf\Variation\Utilities\V1\Api\Variation\VariationResources::class,
     ],
     'controllers' => [
         'variations' => \Callmeaf\Variation\Http\Controllers\V1\Api\VariationController::class,
     ],
     'form_request_authorizers' => [
-        'variation' => \Callmeaf\Variation\Utilities\V1\Variation\Api\VariationFormRequestAuthorizer::class,
+        'variation' => \Callmeaf\Variation\Utilities\V1\Api\Variation\VariationFormRequestAuthorizer::class,
     ],
     'middlewares' => [
-        'variation' => \Callmeaf\Variation\Utilities\V1\Variation\Api\VariationControllerMiddleware::class,
+        'variation' => \Callmeaf\Variation\Utilities\V1\Api\Variation\VariationControllerMiddleware::class,
     ],
-    'searcher' => \Callmeaf\Variation\Utilities\V1\Variation\Api\VariationSearcher::class,
+    'searcher' => \Callmeaf\Variation\Utilities\V1\Api\Variation\VariationSearcher::class,
     'prefix_sku' => 'callmeaf-',
     'sku_length' => 6,
 ];

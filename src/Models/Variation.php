@@ -4,6 +4,7 @@ namespace Callmeaf\Variation\Models;
 
 use Callmeaf\Base\Contracts\HasEnum;
 use Callmeaf\Base\Contracts\HasResponseTitles;
+use Callmeaf\Base\Enums\ResponseTitle;
 use Callmeaf\Base\Traits\HasDate;
 use Callmeaf\Base\Traits\HasMediaMethod;
 use Callmeaf\Base\Traits\HasStatus;
@@ -82,7 +83,20 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
         return $this->type?->cat === VariationTypeCat::PHYSICAL;
     }
 
-    public function responseTitles(string $key,string $default = ''): string
+    public function hasStock(int $total = 1): bool
+    {
+        if(is_null($this->stock)) {
+            return true;
+        }
+        return intval($this->stock) >= $total;
+    }
+
+    public function isEmpty(int $total = 1): bool
+    {
+        return !$this->hasStock($total);
+    }
+
+    public function responseTitles(ResponseTitle|string $key,string $default = ''): string
     {
         return [
             'store' => $this->title ?? $default,
@@ -91,7 +105,7 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
             'destroy' => $this->title ?? $default,
             'restore' => $this->title ?? $default,
             'force_destroy' => $this->title ?? $default,
-        ][$key];
+        ][$key instanceof ResponseTitle ? $key->value : $key];
     }
 
     public static function enumsLang(): array
