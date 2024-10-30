@@ -3,13 +3,14 @@
 namespace Callmeaf\Variation\Services\V1;
 
 use Callmeaf\Base\Services\V1\BaseService;
+use Callmeaf\Variation\Exceptions\VariationOutOfStockException;
+use Callmeaf\Variation\Models\Variation;
 use Callmeaf\Variation\Services\V1\Contracts\VariationServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Str;
 
 class VariationService extends BaseService implements VariationServiceInterface
 {
@@ -34,4 +35,31 @@ class VariationService extends BaseService implements VariationServiceInterface
         }
         return $sku;
     }
+
+    public function decreaseStock(int $total = 1): VariationServiceInterface
+    {
+        /**
+         * @var Variation $variation
+         */
+        $variation = $this->model;
+        $stock = $variation->stock;
+        if(is_null($stock)) {
+            return $this;
+        }
+        if($variation->isEmpty($total)) {
+            throw new VariationOutOfStockException(__('callmeaf-variation::v1.errors.out_of_stock', ['title' => $variation->title]));
+        }
+        $this->update([
+            'stock' => $stock - $total,
+        ]);
+
+        return $this;
+    }
+
+
+    public function increaseStock(int $total = 1): VariationServiceInterface
+    {
+        return $this->decreaseStock(-$total);
+    }
+
 }

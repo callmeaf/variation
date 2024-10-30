@@ -7,4 +7,6 @@ use Callmeaf\Base\Services\V1\Contracts\BaseServiceInterface;
 interface VariationServiceInterface extends BaseServiceInterface
 {
     public function newSku(): ?string;
+    public function decreaseStock(int $total = 1): self;
+    public function increaseStock(int $total = 1): self;
 }
