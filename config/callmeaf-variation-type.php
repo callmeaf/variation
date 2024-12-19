@@ -21,6 +21,9 @@ return [
         \Callmeaf\Variation\Events\VariationTypeUpdated::class => [
             // listeners
         ],
+        \Callmeaf\Variation\Events\VariationTypeStatusUpdated::class => [
+            // listeners
+        ],
         \Callmeaf\Variation\Events\VariationTypeDestroyed::class => [
             // listeners
         ],

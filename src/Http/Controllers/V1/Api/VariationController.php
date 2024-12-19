@@ -119,9 +119,11 @@ class VariationController extends ApiController
     {
         try {
             $resources = $this->variationResources->statusUpdate();
-            $variation = $this->variationService->setModel($variation)->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations(),events: [
-                VariationStatusUpdated::class
-            ]);
+            $variation = $this->variationService->setModel($variation)->update([
+                'status' => $request->get('status'),
+            ], events: [
+                VariationStatusUpdated::class,
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation' => $variation,
             ],__('callmeaf-base::v1.successful_updated', [
