@@ -30,9 +30,13 @@ class VariationController extends ApiController
     protected VariationResources $variationResources;
     public function __construct()
     {
-        app(config('callmeaf-variation.middlewares.variation'))($this);
         $this->variationService = app(config('callmeaf-variation.service'));
         $this->variationResources = app(config('callmeaf-variation.resources.variation'));
+    }
+
+    public static function middleware(): array
+    {
+        return app(config('callmeaf-variation.middlewares.variation'))();
     }
 
     public function index(VariationIndexRequest $request)

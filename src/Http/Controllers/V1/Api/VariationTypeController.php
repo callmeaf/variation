@@ -26,9 +26,13 @@ class VariationTypeController extends ApiController
     protected VariationTypeResources $variationTypeResources;
     public function __construct()
     {
-        app(config('callmeaf-variation-type.middlewares.variation_type'))($this);
         $this->variationTypeService = app(config('callmeaf-variation-type.service'));
         $this->variationTypeResources = app(config('callmeaf-variation-type.resources.variation_type'));
+    }
+
+    public static function middleware(): array
+    {
+        return app(config('callmeaf-variation-type.middlewares.variation_type'))();
     }
 
     public function index(VariationTypeIndexRequest $request)
