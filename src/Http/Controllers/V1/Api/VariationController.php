@@ -143,9 +143,9 @@ class VariationController extends ApiController
     {
         try {
             $resources = $this->variationResources->destroy();
-            $variation = $this->variationService->setModel($variation)->delete()->getModel(asResource: true,attributes: $resources->attributes(),events: [
+            $variation = $this->variationService->setModel($variation)->delete(events: [
                 VariationDestroyed::class,
-            ]);
+            ])->getModel(asResource: true,attributes: $resources->attributes(),relations: $resources->relations());
             return apiResponse([
                 'variation' => $variation,
             ],__('callmeaf-base::v1.successful_deleted', [

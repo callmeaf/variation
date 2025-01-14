@@ -73,6 +73,13 @@ class Variation extends Model implements HasResponseTitles,HasEnum,HasMedia
         );
     }
 
+    public function realPrice(): Attribute
+    {
+        return Attribute::get(
+            fn() => $this->discount_price ?? $this->price,
+        );
+    }
+
     public function isDigital(): bool
     {
         return $this->type?->cat === VariationTypeCat::DIGITAL;
