@@ -298,6 +298,7 @@ class VariationResources extends Resources
     public function destroy(): self
     {
         $this->data = [
+            'relations' => [],
             'attributes' => [
                 'id',
             ],
